@@ -13,11 +13,6 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && yarn test",
     "test": "jest"
   },
-  "rnpm": {
-    "assets": [
-      "./src/assets/fonts/"
-    ]
-  },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.1",
     "@react-native-community/netinfo": "^5.7.0",
