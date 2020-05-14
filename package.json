@@ -1,4 +1,7 @@
 {
+  "name": "wwd",
+  "version": "0.0.1",
+  "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -6,24 +9,97 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "build": "next build"
+    "build": "next build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx && yarn test",
+    "test": "jest"
+  },
+  "rnpm": {
+    "assets": [
+      "./src/assets/fonts/"
+    ]
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.7.1",
+    "@react-native-community/netinfo": "^5.7.0",
+    "axios": "^0.19.1",
     "expo": "~37.0.3",
+    "i18n-js": "^3.5.1",
+    "jwt-decode": "^2.2.0",
+    "moment": "^2.24.0",
     "next": "^9.4.0",
-    "react": "~16.9.0",
     "react-dom": "~16.9.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+    "react-native-app-intro-slider": "^3.0.0",
+    "react-native-config": "^0.12.0",
+    "react-native-device-info": "^5.5.3",
+    "react-native-dotenv": "^0.2.0",
+    "react-native-fast-image": "^7.0.2",
+    "react-native-flurry-sdk": "^5.3.0",
+    "react-native-gesture-handler": "^1.5.3",
+    "react-native-iap": "^4.4.3",
+    "react-native-image-zoom-viewer": "^2.2.27",
+    "react-native-jw-media-player": "^0.1.36",
+    "react-native-linear-gradient": "^2.5.6",
+    "react-native-localize": "^1.3.2",
+    "react-native-marketingcloudsdk": "^7.1.0",
+    "react-native-modal-dropdown": "^0.7.0",
+    "react-native-modal": "^11.5.4",
+    "react-native-orientation": "^3.1.3",
+    "react-native-reanimated": "^1.4.0",
+    "react-native-render-html": "^4.2.0",
     "react-native-screens": "~2.2.0",
-    "react-native-web": "~0.11.7"
+    "react-native-splash-screen": "^3.2.0",
+    "react-native-swipe-gestures": "^1.0.4",
+    "react-native-tab-view": "^2.11.0",
+    "react-native-view-pdf": "^0.10.1",
+    "react-native-web": "~0.11.7",
+    "react-native-webview": "^9.0.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+    "react-navigation-collapsible": "~3.0.3",
+    "react-navigation-stack": "^1.10.3",
+    "react-navigation-tabs": "^2.6.2",
+    "react-navigation": "^4.0.10",
+    "react-redux": "^7.1.3",
+    "react": "~16.9.0",
+    "redux-saga": "^1.1.3",
+    "redux": "^4.0.5",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
     "@expo/next-adapter": "^2.1.6",
-    "@types/react": "~16.9.23",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "@types/jest": "^24.0.24",
+    "@types/react-native-orientation": "^5.0.1",
+    "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-native": "~0.61.17",
+    "@types/react-redux": "^7.1.6",
+    "@types/react-test-renderer": "16.9.1",
+    "@types/react": "~16.9.23",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "babel-jest": "^24.9.0",
     "babel-preset-expo": "~8.1.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint": "^6.5.1",
+    "husky": "^4.2.3",
+    "jest-html-reporter": "^2.8.0",
+    "jest-junit": "^10.0.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
+    "react-test-renderer": "16.9.0",
     "typescript": "~3.8.3"
   },
-  "private": true
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
 }
