@@ -1,5 +1,3 @@
-import { Platform } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
-const dirs = RNFetchBlob.fs.dirs;
-export const filePath =
-  Platform.OS === 'ios' ? dirs.DocumentDir + '/wwd_data' : dirs.MainBundleDir + '/wwd_data';
+import * as FileSystem from 'expo-file-system';
+
+export const filePath = FileSystem.documentDirectory + 'wwd_data';

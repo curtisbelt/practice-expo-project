@@ -1,4 +1,4 @@
-import RNFetchBlob from 'rn-fetch-blob';
+import * as FileSystem from 'expo-file-system';
 import { filePath } from './filePath';
 
 const createDirectory = async () => {
@@ -6,8 +6,7 @@ const createDirectory = async () => {
   let check = await checkDirectory(filePath);
 
   if (!check) {
-    result = await RNFetchBlob.fs
-      .mkdir(filePath)
+    result = await FileSystem.makeDirectoryAsync(filePath)
       .then(() => {
         return true;
       })
@@ -23,10 +22,9 @@ const createDirectory = async () => {
 
 const checkDirectory = async (path: any) => {
   let result: boolean = false;
-  result = await RNFetchBlob.fs
-    .exists(path)
-    .then((exist) => {
-      return exist ? true : false;
+  result = await FileSystem.getInfoAsync(path)
+    .then((info) => {
+      return info.isDirectory && info.exists ? true : false;
     })
     .catch(() => {
       return false;
@@ -35,11 +33,10 @@ const checkDirectory = async (path: any) => {
 };
 
 const writeFileStream = async (data: any) => {
+  let currentData = readFileStream();
+
   try {
-    await RNFetchBlob.fs.writeStream(filePath + '/wwd.json', 'utf8').then((stream) => {
-      stream.write(JSON.stringify(data));
-      return stream.close();
-    });
+    await FileSystem.writeAsStringAsync(filePath + '/wwd.json', currentData + JSON.stringify(data));
   } catch {
     // do nothing
   }
@@ -47,8 +44,7 @@ const writeFileStream = async (data: any) => {
 
 const readFileStream = async () => {
   let result: any = '';
-  await RNFetchBlob.fs
-    .readFile(filePath + '/wwd.json', 'utf8')
+  await FileSystem.readAsStringAsync(filePath + '/wwd.json')
     .then((data) => {
       result = data;
     })
@@ -60,11 +56,12 @@ const readFileStream = async () => {
 };
 
 const writeLoginFileStream = async (data: any) => {
+  let currentData = readLoginFileStream();
   try {
-    await RNFetchBlob.fs.writeStream(filePath + '/login.json', 'utf8').then((stream) => {
-      stream.write(JSON.stringify(data));
-      return stream.close();
-    });
+    await FileSystem.writeAsStringAsync(
+      filePath + '/login.json',
+      currentData + JSON.stringify(data),
+    );
   } catch {
     // do nothing
   }
@@ -72,8 +69,7 @@ const writeLoginFileStream = async (data: any) => {
 
 const readLoginFileStream = async () => {
   let result: any = '';
-  await RNFetchBlob.fs
-    .readFile(filePath + '/login.json', 'utf8')
+  await FileSystem.readAsStringAsync(filePath + '/login.json')
     .then((data) => {
       result = data;
     })
@@ -85,11 +81,12 @@ const readLoginFileStream = async () => {
 };
 
 const writeSubscriptionFileStream = async (data: any) => {
+  let currentData = readSubscriptionFileStream();
   try {
-    await RNFetchBlob.fs.writeStream(filePath + '/subs.json', 'utf8').then((stream) => {
-      stream.write(JSON.stringify(data));
-      return stream.close();
-    });
+    await FileSystem.writeAsStringAsync(
+      filePath + '/subs.json',
+      currentData + JSON.stringify(data),
+    );
   } catch {
     // do nothing
   }
@@ -97,8 +94,7 @@ const writeSubscriptionFileStream = async (data: any) => {
 
 const readSubscriptionFileStream = async () => {
   let result: any = '';
-  await RNFetchBlob.fs
-    .readFile(filePath + '/subs.json', 'utf8')
+  await FileSystem.readAsStringAsync(filePath + '/subs.json')
     .then((data) => {
       result = data;
     })
