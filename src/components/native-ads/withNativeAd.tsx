@@ -1,0 +1,185 @@
+import React from 'react';
+import { findNodeHandle, requireNativeComponent, UIManager } from 'react-native';
+import { TriggerableContext } from './TriggerableViewManager';
+import AdsManager from './NativeAdsManager';
+import { createErrorFromErrorData } from './../utils';
+
+const areSetsEqual = (a, b) => {
+  if (a.size !== b.size) return false;
+  for (const aItem of a) {
+    if (!b.has(aItem)) return false;
+  }
+  return true;
+};
+
+/**
+ * TODO: Why is there compiled typescript here?
+ */
+const __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === 'function')
+      // eslint-disable-next-line no-redeclare
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    return t;
+  };
+
+const NativeAdView = requireNativeComponent('CTKAdManageNative');
+
+export default (Component) =>
+  class NativeAdWrapper extends React.Component {
+    constructor(props) {
+      super(props);
+      this.registerClickableChild = (child) => {
+        const handle = findNodeHandle(child);
+        if (!handle) {
+          return;
+        }
+        this.clickableChildrenNodeHandles.set(child, handle);
+        this.setState({
+          clickableChildren: this.state.clickableChildren.add(handle),
+        });
+      };
+      this.unregisterClickableChild = (child) => {
+        this.setState(({ clickableChildren }) => {
+          const newClickableChildren = new Set(clickableChildren);
+          newClickableChildren.delete(this.clickableChildrenNodeHandles.get(child));
+          this.clickableChildrenNodeHandles.delete(child);
+          return { clickableChildren: newClickableChildren };
+        });
+      };
+
+      this.handleOnAdLoaded = ({ nativeEvent }) => {
+        this.setState({ nativeAd: nativeEvent });
+        this.props.onAdLoaded && this.props.onAdLoaded(nativeEvent);
+      };
+      this.handleOnSizeChange = ({ nativeEvent }) => {
+        const { height, width } = nativeEvent;
+        this.setState({ style: { width, height } });
+        this.props.onSizeChange && this.props.onSizeChange(nativeEvent);
+      };
+      this.handleOnAdFailedToLoad = ({ nativeEvent }) => {
+        if (this.props.onAdFailedToLoad) {
+          this.props.onAdFailedToLoad(createErrorFromErrorData(nativeEvent.error));
+        }
+      };
+      this.handleOnAdOpened = ({ nativeEvent }) => {
+        this.props.onAdOpened && this.props.onAdOpened(nativeEvent);
+      };
+      this.handleOnAdClosed = ({ nativeEvent }) => {
+        this.props.onAdClosed && this.props.onAdClosed(nativeEvent);
+      };
+      this.handleOnAdLeftApplication = ({ nativeEvent }) => {
+        this.props.onAdLeftApplication && this.props.onAdLeftApplication(nativeEvent);
+      };
+      this.handleOnAppEvent = ({ nativeEvent }) => {
+        this.props.onAppEvent && this.props.onAppEvent(nativeEvent);
+      };
+
+      this.handleNativeAdViewMount = (ref) => {
+        this.nativeAdViewRef = ref;
+      };
+      this.registerFunctionsForTriggerables = {
+        register: this.registerClickableChild,
+        unregister: this.unregisterClickableChild,
+      };
+      this.clickableChildrenNodeHandles = new Map();
+      this.state = {
+        // iOS requires a non-null value
+        clickableChildren: new Set(),
+        style: {},
+      };
+    }
+
+    componentDidMount() {
+      this.reloadAd();
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+      if (
+        Object.entries(this.state).toString() === Object.entries(nextState).toString() &&
+        Object.entries(this.props).toString() === Object.entries(nextProps).toString()
+      ) {
+        return false;
+      }
+      return true;
+    }
+
+    componentDidUpdate(_, prevState) {
+      const clickableChildrenChanged = areSetsEqual(
+        prevState.clickableChildren,
+        this.state.clickableChildren,
+      );
+      if (clickableChildrenChanged) {
+        const viewHandle = findNodeHandle(this.nativeAdViewRef);
+        if (!viewHandle) {
+          // Skip registration if the view is no longer valid.
+          return;
+        }
+
+        AdsManager.registerViewsForInteractionAsync(viewHandle, [...this.state.clickableChildren])
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .then((data) => {
+            // do nothing for now
+          })
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .catch((e) => {
+            // do nothing for now
+          });
+      }
+    }
+
+    reloadAd() {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(this.nativeAdViewRef),
+        UIManager.getViewManagerConfig('CTKAdManageNative').Commands.reloadAd,
+        null,
+      );
+    }
+
+    renderAdComponent(componentProps) {
+      if (!this.state.nativeAd) {
+        return null;
+      }
+
+      return (
+        <TriggerableContext.Provider value={this.registerFunctionsForTriggerables}>
+          <Component {...componentProps} nativeAd={this.state.nativeAd} />
+        </TriggerableContext.Provider>
+      );
+    }
+
+    render() {
+      // Cast to any until https://github.com/Microsoft/TypeScript/issues/10727 is resolved
+      const _a = this.props,
+        { adsManager } = _a,
+        rest = __rest(_a, ['adsManager', 'onAdLoaded']);
+
+      return (
+        <NativeAdView
+          style={[this.props.style, this.state.style]}
+          adSize={this.props.adSize}
+          correlator={this.props.correlator}
+          customTemplateId={this.props.customTemplateId}
+          validAdSizes={this.props.validAdSizes}
+          validAdTypes={this.props.validAdTypes}
+          ref={this.handleNativeAdViewMount}
+          onAdLoaded={this.handleOnAdLoaded}
+          onSizeChange={this.handleOnSizeChange}
+          onAdFailedToLoad={this.handleOnAdFailedToLoad}
+          onAdOpened={this.handleOnAdOpened}
+          onAdClosed={this.handleOnAdClosed}
+          onAdLeftApplication={this.handleOnAdLeftApplication}
+          onAppEvent={this.handleOnAppEvent}
+          targeting={this.props.targeting}
+          adsManager={adsManager.toJSON()}
+        >
+          {this.renderAdComponent(rest)}
+        </NativeAdView>
+      );
+    }
+  };

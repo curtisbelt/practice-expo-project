@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-first-expo",
-    "slug": "my-first-expo",
+    "name": "wwd",
+    "slug": "wwd",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
