@@ -7,17 +7,11 @@ import {
   // Dimensions,
   Platform,
 } from 'react-native';
-import posed from 'react-native-pose';
 import { moderateScale } from '../../helpers/scale';
 import { connect } from 'react-redux';
 import { changeCategoryIndex } from '../../redux/actions/HomeAction';
 // [2/5] The commented code below leads up to the variable 'poses' in init(). 'poses' is assigned a value but never used.
 // const windowWidth = Dimensions.get('window').width;
-
-const Scaler = posed.View({
-  active: { scale: 1 },
-  inactive: { scale: 1 },
-});
 
 const S = StyleSheet.create({
   container: {
@@ -107,9 +101,7 @@ class TabBar extends React.Component<Props, {}> {
               }}
               accessibilityLabel={getAccessibilityLabel({ route })}
             >
-              <Scaler pose={isRouteActive ? 'active' : 'inactive'} style={S.scaler}>
-                {renderIcon({ route, focused: isRouteActive, tintColor })}
-              </Scaler>
+              {renderIcon({ route, focused: isRouteActive, tintColor })}
             </TouchableOpacity>
           );
         })}
