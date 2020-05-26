@@ -3,7 +3,7 @@ import { AppState, YellowBox, Platform } from 'react-native';
 import { Provider } from 'react-redux';
 import Store from './src/redux/store';
 import Flurry from 'react-native-flurry-sdk';
-import Device from 'react-native-device-info';
+import * as Application from 'expo-application';
 import AsyncStorage from '@react-native-community/async-storage';
 import { asynStoreKeys, setItem, getItem, removeKey } from './src/helpers/asyncStore';
 import { getCurrentTodayDate, getDaysDifference } from './src/helpers/dateTimeFormats';
@@ -25,15 +25,15 @@ const App = () => {
     AsyncStorage.getItem('buildNumber').then((buildNumber) => {
       if (!buildNumber) {
         Flurry.logEvent('First Launch');
-        AsyncStorage.setItem('buildNumber', JSON.stringify(Device.getBuildNumber()));
+        AsyncStorage.setItem('buildNumber', JSON.stringify(Application.nativeBuildVersion));
         return;
       } else {
         AsyncStorage.getItem('buildNumber').then((buildNumber) => {
           let localBuildNumber = parseInt(JSON.parse(buildNumber));
-          let originalBuildNumber = parseInt(Device.getBuildNumber());
+          let originalBuildNumber = parseInt(Application.nativeBuildVersion);
           if (originalBuildNumber > localBuildNumber) {
             Flurry.logEvent('First Launch After Update');
-            AsyncStorage.setItem('buildNumber', JSON.stringify(Device.getBuildNumber()));
+            AsyncStorage.setItem('buildNumber', JSON.stringify(Application.nativeBuildVersion));
           }
         });
       }

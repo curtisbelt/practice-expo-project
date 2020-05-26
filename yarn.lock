@@ -5199,6 +5199,11 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+expo-application@~2.1.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/expo-application/-/expo-application-2.1.1.tgz#7cd61ccc53d7a0c85c8aac64b5ea59b20a1cb803"
+  integrity sha512-iq24Zgd4EmbFakHL2saVdA2zexhRX80RSbAtrWrp3BaVDd7yFNAtcwjW4r1Oyhm00YEREWp70sTaXrWs6jKHQA==
+
 expo-asset@~8.1.5:
   version "8.1.5"
   resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-8.1.5.tgz#6d0e3504cd719e9b888d32978d419d6522eed799"
@@ -9722,11 +9727,6 @@ react-native-config@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-0.12.0.tgz#910e52226b60e0c9f2b648772eea2a93f8701751"
   integrity sha512-lC8QOZCGCXgFh74uWSVGMaChg+Qf2BScWzVd9C4yrFnfxrHSFyIekqOOq/sjE8Uu2ifgxZmSiK1Z8EEi78AmQA==
-
-react-native-device-info@^5.5.3:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-5.6.0.tgz#a2da56caf247638f8450698ee5c9a2a838631bf3"
-  integrity sha512-1XeTfGVypQyK9lP8PGy3vFctw0EhoX6XrfycPfsgUu+SsMgX+nJXbAg5Qc2gJgeVFMlGZC9FaI+dskufrCzniA==
 
 react-native-dotenv@^0.2.0:
   version "0.2.0"
