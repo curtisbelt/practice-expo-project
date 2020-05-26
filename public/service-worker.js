@@ -5,7 +5,7 @@
  * Store notification icon string in service worker.
  * Ref: https://stackoverflow.com/a/35729334/2603230
  */
-self.addEventListener('message', event => {
+self.addEventListener('message', (event) => {
   let data = JSON.parse(event.data);
 
   if (data.fromExpoWebClient) {
@@ -16,7 +16,7 @@ self.addEventListener('message', event => {
 /**
  * Add support for push notification.
  */
-self.addEventListener('push', event => {
+self.addEventListener('push', (event) => {
   let payload = {};
   try {
     payload = event.data.json();
@@ -43,7 +43,7 @@ self.addEventListener('push', event => {
 });
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Clients
-self.addEventListener('notificationclick', event => {
+self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
   event.waitUntil(
@@ -80,7 +80,7 @@ self.addEventListener('notificationclick', event => {
         data: event.notification.data,
         remote: !event.notification._isLocal,
       });
-    })()
+    })(),
   );
 });
 

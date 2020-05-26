@@ -23,7 +23,7 @@ createServerAsync(projectRoot, {
       return true;
     }
   },
-}).then(results => {
+}).then((results) => {
   const port = 3000;
   server = results.server;
   app = results.app;
